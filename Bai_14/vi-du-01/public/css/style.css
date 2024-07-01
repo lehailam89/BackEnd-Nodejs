@@ -1,0 +1,15 @@
+.test{
+    color: red;
+}
+
+.carth1{
+    color: green;
+}
+
+table{
+    border: 1px solid #ddd;
+}
+th, td{
+    border: 1px solid #ddd;
+    padding: 10px;
+}
