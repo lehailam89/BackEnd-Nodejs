@@ -14,9 +14,10 @@ html, body {
 
 .content {
     flex: 1; /* Takes up the remaining space */
+    background-color: #dddddd31;
 }
 
-/* Header */
+/* Header */ 
 .header {
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
@@ -39,6 +40,20 @@ html, body {
 
 .header .inner-menu > ul > li {
     margin-left: 20px;
+}
+
+.header .inner-menu > ul > li > a {
+    border: 1px solid none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #DB0E0E;
+    color: #fff;
+} 
+.header .inner-menu > ul > li > a:hover {
+    background-color: #fff;
+    color: #DB0E0E;
+    text-decoration: none;
+    transition: all 0.3;
 }
 /* End Header */
 
@@ -69,6 +84,7 @@ html, body {
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    background: #fff;
 }
 
 .product-item .inner-image{
