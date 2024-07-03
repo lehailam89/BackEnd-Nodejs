@@ -3,48 +3,49 @@ extends ../../layouts/default.pug
 block main
     h1 Danh sách sản phẩm
 
-    table.table.table-hover.table-sm
-        thead
-            tr
-                th STT 
-                th Hình ảnh 
-                th Tiêu đề
-                th Giá
-                th Trạng thái 
-                th Hành động
-        
-        tbody 
-            tr 
-                td 1
-                td 
-                    img(
-                        src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone15prohero-202309_FMT_WHH?wid=508&hei=472&fmt=p-jpg&qlt=95&.v=1693086369818",
-                        att="Sản phẩm 1"
-                        width= "100px"
-                        height= "auto"
-                    )
-                td Sản phẩm 1
-                td 100$
-                td 
-                    a(href="#" class="badge badge-success") Hoạt động
-                td
-                    button(class="btn btn-warning btn-sm") Sửa
-                    button(Class="btn btn-danger btn-sm ml-1") Xoá
+    .card.mb-3
+        .card-header Bộ lọc và tìm kiếm
+        .card-body
+            each item in filterStatus
+                button(
+                    class=`btn btn-sm ml-1 btn-outline-success ${item.class}`
+                    button-status=item.status
+                ) #{item.name}
+            
 
-            tr 
-                td 2
-                td 
-                    img(
-                        src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-13_2_.png  "
-                        att="Sản phẩm 2"
-                        width= "100px"
-                        height= "auto"
-                    )
-                td Sản phẩm 2
-                td 120$
-                td 
-                    a(href="#" class="badge badge-danger") Dừng hoạt động
-                td
-                    button(class="btn btn-warning btn-sm") Sửa
-                    button(Class="btn btn-danger btn-sm ml-1") Xoá
-                
+    .card.mb-3
+        .card-header Danh sách sản phẩm
+            .card-body
+                table.table.table-hover.table-sm
+                    thead
+                        tr
+                            th STT 
+                            th Hình ảnh 
+                            th Tiêu đề
+                            th Giá
+                            th Trạng thái 
+                            th Hành động
+                    
+                    tbody 
+                        each item,index in products
+                            tr 
+                                td #{index + 1}
+                                td 
+                                    img(
+                                        src=item.thumbnail
+                                        att=item.title
+                                        width= "100px"
+                                        height= "auto"
+                                    )
+                                td #{item.title}
+                                td #{item.price}$
+                                td 
+                                    if(item.status == "active")
+                                        a(href="#" class="badge badge-success") Hoạt động
+                                    else
+                                        a(href="#" class="badge badge-danger") Dừng hoạt động
+                                td
+                                    button(class="btn btn-warning btn-sm") Sửa
+                                    button(Class="btn btn-danger btn-sm ml-1") Xoá
+
+                    
