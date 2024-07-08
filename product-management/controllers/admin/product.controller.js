@@ -30,13 +30,22 @@ module.exports.index = async(req, res) => {
     }
 
     let find = {
-        deleted: false,
+        deleted: false
     };
 
     if(req.query.status) {
         find.status = req.query.status;
     }
    
+    let keyword = "";
+
+    if(req.query.keyword) {
+        keyword = req.query.keyword;
+
+        const regex = new RegExp(keyword, "i");
+        find.title = regex;
+    }
+    //req.query thì nó sẽ trả ra các query(truy vấn) trên url mà mình truyền vào
 
     const products = await Product.find(find);
     //console.log(products)
@@ -45,6 +54,7 @@ module.exports.index = async(req, res) => {
     res.render("admin/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
         products: products,
-        filterStatus: filterStatus
+        filterStatus: filterStatus,
+        keyword: keyword
     })
 }
