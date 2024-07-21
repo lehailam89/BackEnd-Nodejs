@@ -102,6 +102,16 @@ module.exports.changeMulti = async (req, res) => {
 //[DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
-    await Product.deleteOne({_id: id});
+    // await Product.deleteOne({_id: id}); //deleteOne là hàm của mongoose để xóa 1 bản ghi trong database => xoá cứng
+
+    await Product.updateOne({ _id: id}, 
+        {
+            deleted: true,
+            deletedAt: new Date()//new Date là hàm của js lấy ra thời gian hiện tại
+        
+        }
+    ); //updateOne là hàm của mongoose để update 1 bản ghi trong database => xoá mềm
+
+
     res.redirect("back");
 }
