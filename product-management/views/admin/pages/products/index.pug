@@ -3,6 +3,7 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 
+
 block main
     h1 Danh sách sản phẩm
 
@@ -43,14 +44,24 @@ block main
                                 td #{item.price}$
                                 td 
                                     if(item.status == "active")
-                                        a(href="#" class="badge badge-success") Hoạt động
+                                        a(
+                                            href="javascript: ;"
+                                            data-status=item.status
+                                            data-id=item.id 
+                                            button-change-status
+                                            class="badge badge-success") Hoạt động
                                     else
-                                        a(href="#" class="badge badge-danger") Dừng hoạt động
+                                        a(
+                                            href="javascript: ;"
+                                            data-status=item.status
+                                            data-id=item.id
+                                            button-change-status 
+                                        class="badge badge-danger") Dừng hoạt động
                                 td
                                     button(class="btn btn-warning btn-sm") Sửa
                                     button(Class="btn btn-danger btn-sm ml-1") Xoá
 
-    +pagination(pagination)
+    +pagination(pagination) 
     //- nav
     //-     ul(class="pagination")
     //-         if(pagination.currentPage > 1)
@@ -70,3 +81,13 @@ block main
     //-                 button(class="page-link"
     //-                 button-pagination=pagination.currentPage + 1
     //-                 ) Trang tiếp
+
+
+    form(
+        action=""
+        method="POST"
+        id="form-change-status"
+        data-path=`${prefixAdmin}/products/change-status`
+    )
+
+    script(src="/admin/js/product.js")
