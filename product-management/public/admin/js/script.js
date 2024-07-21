@@ -62,3 +62,67 @@ if(formSearch){
     }
 
 //End Pagination
+
+
+//CheckBox Multi
+const checkboxMulti = document.querySelector("[checkbox-multi]");
+if(checkboxMulti){
+    const inputcheckAll = checkboxMulti.querySelector("input[name='checkall']");
+    const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
+  
+    inputcheckAll.addEventListener("click", () => { 
+        if(inputcheckAll.checked == true){
+            inputsId.forEach(input => {
+                input.checked = true;
+            });
+        }else{
+            inputsId.forEach(input => {
+                input.checked = false;
+            });
+        }    
+    });
+
+    inputsId.forEach(input => {
+        input.addEventListener("click", () => {
+            const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
+            // console.log(countChecked);
+
+            if(countChecked == inputsId.length) {
+                inputcheckAll.checked = true; 
+            } else {
+                inputcheckAll.checked = false;
+            }
+        });
+    });
+}
+//End checkBox Multi
+
+
+//Form Change Multi
+const formChangeMulti = document.querySelector("[form-change-multi] ");
+if(formChangeMulti){
+    formChangeMulti.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const checkboxMulti = document.querySelector("[checkbox-multi]");
+        const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+        
+        if(inputsChecked.length > 0){
+            let ids = [];
+            const inputIds = formChangeMulti.querySelector("input[name='ids']");
+
+            inputsChecked.forEach(input => {
+                const id = input.getAttribute("value");
+                ids.push(id);
+            });
+
+            // console.log(ids.join(", ")); //hàm join để convert thành string 
+            inputIds.value = ids.join(", ");
+
+            formChangeMulti.submit();
+        }else {
+            alert("Vui lòng chọn ít nhất một sản phẩm!");
+        }
+    });
+}
+
+//End Form Change Multi
