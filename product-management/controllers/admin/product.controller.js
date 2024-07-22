@@ -92,6 +92,9 @@ module.exports.changeMulti = async (req, res) => {
         case "inactive":
             await Product.updateMany({ _id: {$in: ids}}, {status: "inactive"});
             break;
+        case "delete-all":
+            await Product.updateMany({ _id: {$in: ids}}, {deleted: true, deletedAt: new Date()});
+            break;
         default:
             break;
     }
@@ -107,8 +110,7 @@ module.exports.deleteItem = async (req, res) => {
     await Product.updateOne({ _id: id}, 
         {
             deleted: true,
-            deletedAt: new Date()//new Date là hàm của js lấy ra thời gian hiện tại
-        
+            deletedAt: new Date()//new Date là hàm của js lấy ra thời gian hiện tại      
         }
     ); //updateOne là hàm của mongoose để update 1 bản ghi trong database => xoá mềm
 
