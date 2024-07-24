@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 var flash = require("express-flash");
+const multer = require('multer');
 
 require("dotenv").config();
 
