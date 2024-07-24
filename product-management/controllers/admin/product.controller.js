@@ -2,6 +2,7 @@ const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
+const systemConfig = require("../../config/system");
 
 //[GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -9,7 +10,7 @@ module.exports.index = async (req, res) => {
 
     const filterStatus = filterStatusHelper(req.query);
 
-    console.log(filterStatus);
+    // console.log(filterStatus);
 
     let find = {
         deleted: false
@@ -102,6 +103,7 @@ module.exports.changeMulti = async (req, res) => {
             break;
         case "delete-all":
             await Product.updateMany({ _id: {$in: ids}}, {deleted: true, deletedAt: new Date()});
+            req.flash("success", `Đã xoá thành công ${ids.length} sản phẩm`);   
             break;
         case "change-position":
             for(const item of ids){
@@ -109,6 +111,7 @@ module.exports.changeMulti = async (req, res) => {
                 position=parseInt(position);
                 await Product.updateOne({_id: id}, {position: position});
             }
+            req.flash("success", "Cập nhật vị trí thành công!");   
             break;
         default:
             break;
@@ -129,6 +132,36 @@ module.exports.deleteItem = async (req, res) => {
         }
     ); //updateOne là hàm của mongoose để update 1 bản ghi trong database => xoá mềm
 
+    req.flash("success", "Xoá sản phẩm thành công!");   
 
     res.redirect("back");
 }
+
+//[GET] /admin/products/create tạo mới một sản phẩm
+module.exports.create = async (req, res) => {
+    res.render("admin/pages/products/create", {
+        pageTitle: "Thêm mới sản phẩm",
+    });
+}
+
+//[POST] /admin/products/create
+module.exports.createPost = async (req, res) => {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+
+    if(req.body.position === ""){
+        const countProducts = await Product.countDocuments();
+        req.body.position = countProducts + 1;
+    } else {
+        req.body.position = parseInt(req.body.position);
+    }
+
+    const product = new Product(req.body);
+    await product.save();
+
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+};
+    
+
+
