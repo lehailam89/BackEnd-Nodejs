@@ -168,17 +168,20 @@ module.exports.createPost = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
     
-//[EDIT] /admin/products/edit/:id
+//[GET] /admin/products/edit/:id, edit sản phẩm
 module.exports.edit = async (req, res) => { 
-    const id = req.params.id;
-    const product = await Product.findOne({_id: id, deleted: false});
-
-    console.log(product);
-
-    res.render("admin/pages/products/edit", {
-        pageTitle: "Chỉnh sửa sản phẩm",
-        product: product
-    })
+    try{
+        const id = req.params.id;
+        const product = await Product.findOne({_id: id, deleted: false});
+    
+        res.render("admin/pages/products/edit", {
+            pageTitle: "Chỉnh sửa sản phẩm",
+            product: product
+        })
+    }catch (error){
+        req.flash("error", "Không tồn tại sản phẩm có id này!");
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 }
 
 //[PATCH] /admin/products/edit/:id
@@ -197,7 +200,23 @@ module.exports.editPatch = async (req, res) => {
 
     await Product.updateOne({ _id: id}, req.body);
 
-    req.flash("success", "Cập nhật sản phẩm thành công!!!!");
+    req.flash("success", "Cập nhật sản phẩm thành công!!!!");   
 
     res.redirect("back");
 };
+
+//[GET] /admin/products/detail/:id
+module.exports.detail = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const product = await Product.findOne({_id: id, deleted: false});
+
+        res.render("admin/pages/products/detail", {
+            pageTitle: "Chi tiết sản phẩm",
+            product: product
+        })
+    } catch (error) {
+        req.flash("error", "Không tồn tại sản phẩm có id này!");
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
+}

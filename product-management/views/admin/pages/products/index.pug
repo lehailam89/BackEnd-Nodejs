@@ -99,6 +99,11 @@ block main
                                         button-delete
                                         data-id=item.id
                                         ) Xoá
+                                    a(
+                                        class="btn btn-secondary btn-sm"
+                                        href=`${prefixAdmin}/products/detail/${item.id}`
+                                        style="margin-left: 5px"
+                                    ) Chi tiết
 
     +pagination(pagination) 
     //- nav
