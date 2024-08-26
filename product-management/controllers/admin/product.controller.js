@@ -6,70 +6,70 @@ const systemConfig = require("../../config/system");
 
 //[GET] /admin/products
 module.exports.index = async (req, res) => {
-    //console.log(req.query.status);   
 
+    //!filterStatus
     const filterStatus = filterStatusHelper(req.query);
-
-    // console.log(filterStatus);
-
-    let find = {
-        deleted: false
-    };
-
-    if (req.query.status) {
-        find.status = req.query.status;
-    }
-
+    //!search
     const objectSearch = searchHelper(req.query);
 
+    let find = {
+        deleted: false,
+    };
 
-    if (objectSearch.keyword) {
-        //Kiến thức tự học thêm về regex
+    //! status
+    if (req.query.status) {
+        find.status = req.query.status;
+    };
+
+    //! search
+    if (req.query.keyword) {
         find.title = objectSearch.regex;
+    };
+
+    //! Pagination
+    let initPagination = {
+        currentPage: 1,
+        limitItems: 4
+    };
+    const countProduct = await Product.countDocuments(find);
+    const objectPagination = paginationHelper(initPagination, req.query, countProduct);
+    //! end pagination
+
+    //! sort
+
+    let sort = {}
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue
+    } else {
+        sort.position = 'desc'
     }
-    //req.query thì nó sẽ trả ra các query(truy vấn) trên url mà mình truyền vào
 
-    //pagination
-    const countProducts = await Product.countDocuments(find); 
-    //tất cả những câu truy vấn vào database đều phải dùng await
-
-    let objectPagination = paginationHelper({
-            currentPage: 1,
-            limitItems: 4
-        },
-        req.query,
-        countProducts
-    );
-
-    // if(req.query.page){
-    //     objectPagination.currentPage = parseInt(req.query.page);
-    // }
-
-    // objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItems;
-
-    // const countProducts = await Product.countDocuments(find); 
-    // //tất cả những câu truy vấn vào database đều phải dùng await
-
-
-    // const totalPage = Math.ceil(countProducts / objectPagination.limitItems);
-    // console.log(totalPage);
-
-    // objectPagination.totalPage = totalPage;
-    //end pagination
+    //! end sort
 
     const products = await Product.find(find)
-    .sort({ position: "desc"}) //postion là trường mình muốn sắp xếp theo vị trí, desc là giảm dần, asc là tăng dần 
-    .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
-    //console.log(products)
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip)
+        .sort(sort);
 
-    res.render("admin/pages/products/index", {
-        pageTitle: "Danh sách sản phẩm",
-        products: products,
-        filterStatus: filterStatus,
-        keyword: objectSearch.keyword,
-        pagination: objectPagination
-    })
+    if (products.length > 0 || countProduct == 0) {
+        res.render("./admin/pages/products/index.pug", {
+            pageTitle: 'Danh sách sản phẩm',
+            products: products,
+            filterStatus: filterStatus,
+            keyword: objectSearch.keyword,
+            pagination: objectPagination
+        });
+    } else {
+        let stringQuery = "";
+
+        for (const key in req.query) {
+            if (key != "page") {
+                stringQuery += `&${key}=${req.query[key]}`
+            }
+        }
+        const href = `${req.baseUrl}?page=1${stringQuery}`
+        res.redirect(href)
+    }
 }
 
 // Controler Change Status
