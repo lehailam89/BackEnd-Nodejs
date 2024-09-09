@@ -4,7 +4,7 @@ const multer = require('multer');//để upload ảnh lên
 const upload = multer();//để úp ảnh lên
 const controller = require("../../controllers/admin/account.controller.js");
 
-const uploadCloud = require("../../middlewares/uploadCloud.middleware.js");
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware.js");
 
 router.get("/", controller.index);
 
