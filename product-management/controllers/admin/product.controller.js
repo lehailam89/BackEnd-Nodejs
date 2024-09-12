@@ -114,7 +114,16 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", `Cập nhật trạng thái thành công ${ids.length} sản phẩm`);   
             break;
         case "delete-all":
-            await Product.updateMany({ _id: {$in: ids}}, {deleted: true, deletedAt: new Date()});
+            await Product.updateMany(
+                { _id: {$in: ids}}, 
+                {
+                    deleted: true,
+                    deletedBy: {
+                        deletedAt: new Date(),
+                        account_id: res.locals.user.id
+                    }  
+                }
+            );
             req.flash("success", `Đã xoá thành công ${ids.length} sản phẩm`);   
             break;
         case "change-position":
@@ -140,7 +149,11 @@ module.exports.deleteItem = async (req, res) => {
     await Product.updateOne({ _id: id}, 
         {
             deleted: true,
-            deletedAt: new Date()//new Date là hàm của js lấy ra thời gian hiện tại      
+            // deletedAt: new Date()//new Date là hàm của js lấy ra thời gian hiện tại    
+            deletedBy: {
+                deletedAt: new Date(),
+                account_id: res.locals.user.id
+            }  
         }
     ); //updateOne là hàm của mongoose để update 1 bản ghi trong database => xoá mềm
 
