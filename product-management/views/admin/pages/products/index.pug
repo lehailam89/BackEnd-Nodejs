@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 
 block main
     if(role.permissions.includes('products_view'))
@@ -56,6 +57,7 @@ block main
                                 th Giá
                                 th Vị trí của sản phẩm
                                 th Trạng thái 
+                                th Người tạo
                                 th Hành động
                         
                         tbody 
@@ -100,6 +102,13 @@ block main
                                                 data-id=item.id
                                                 button-change-status 
                                             class="badge badge-danger") Dừng hoạt động
+                                    td 
+                                        if(item.createdBy.accountFullName)
+                                            div #{item.createdBy.accountFullName} 
+                                            div 
+                                                +formatDate(item.createdBy.createdAt)
+                                            div     
+                                                +formatTime(item.createdBy.createdAt)
                                     td
                                         if(role.permissions.includes('products_edit'))
                                             a(
