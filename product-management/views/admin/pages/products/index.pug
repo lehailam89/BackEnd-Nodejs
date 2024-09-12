@@ -58,6 +58,7 @@ block main
                                 th Vị trí của sản phẩm
                                 th Trạng thái 
                                 th Người tạo
+                                th Người cập nhật
                                 th Hành động
                         
                         tbody 
@@ -109,6 +110,13 @@ block main
                                                 +formatDate(item.createdBy.createdAt)
                                             div     
                                                 +formatTime(item.createdBy.createdAt)
+                                    td 
+                                        if(item.updatedBy.length > 0)
+                                            div #{item.updatedBy.slice(-1)[0].accountFullName} 
+                                            div 
+                                                +formatDate(item.updatedBy.slice(-1)[0].updatedAt)
+                                            div 
+                                                +formatTime(item.updatedBy.slice(-1)[0].updatedAt)
                                     td
                                         if(role.permissions.includes('products_edit'))
                                             a(

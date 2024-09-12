@@ -57,10 +57,23 @@ module.exports.index = async (req, res) => {
         .sort(sort);
 
     for (const product of products) {
-        const user = await Account.findOne({ _id: product.createdBy.account_id });
-        if(user){
-            product.createdBy.accountFullName = user.fullName;
+        //Lấy ra người tạo
+        const userCreated = await Account.findOne({ _id: product.createdBy.account_id });
+        if(userCreated){
+            product.createdBy.accountFullName = userCreated.fullName;
         }   
+
+        //Lấy ra người cập nhật
+        const userUpdatedId = product.updatedBy.slice(-1)[0]
+        if (userUpdatedId) {
+            const userUpdated = await Account.findOne({
+                _id: userUpdatedId.account_id
+            })
+            if (userUpdated) {
+                userUpdatedId.accountFullName = userUpdated.fullName
+            }
+        }
+        
     }
         
     if (products.length > 0 || countProduct == 0) {
@@ -89,8 +102,13 @@ module.exports.index = async (req, res) => {
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
+
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     
-    await Product.updateOne({_id: id}, {status: status});
+    await Product.updateOne({_id: id}, {status: status, $push: {updatedBy: updatedBy}});
     //updateOne là 1 chức năng của mongoose để update 1 bản ghi trong database, tự đọc doc của nó
 
     req.flash("success", "Cập nhật trạng thái sản phẩm thành công!");
@@ -104,13 +122,21 @@ module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");//split là hàm js để convert thành một mảng
 
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
+
     switch (type){
         case "active":
-            await Product.updateMany({ _id: {$in: ids}}, {status: "active"});    
+            await Product.updateMany({ _id: {$in: ids}}, 
+                {
+                    status: "active"
+                });    
             req.flash("success", `Cập nhật trạng thái thành công ${ids.length} sản phẩm`);   
             break;
         case "inactive":
-            await Product.updateMany({ _id: {$in: ids}}, {status: "inactive"});
+            await Product.updateMany({ _id: {$in: ids}}, {status: "inactive", $push: {updatedBy: updatedBy}});
             req.flash("success", `Cập nhật trạng thái thành công ${ids.length} sản phẩm`);   
             break;
         case "delete-all":
@@ -130,7 +156,7 @@ module.exports.changeMulti = async (req, res) => {
             for(const item of ids){
                 let [id, position] = item.split("-");
                 position=parseInt(position);
-                await Product.updateOne({_id: id}, {position: position});
+                await Product.updateOne({_id: id}, {position: position, $push: {updatedBy: updatedBy}});
             }
             req.flash("success", "Cập nhật vị trí thành công!");   
             break;
@@ -244,8 +270,15 @@ module.exports.editPatch = async (req, res) => {
         req.body.thumbnail = `/uploads/${req.file.filename}`;
     }
 
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
 
-    await Product.updateOne({ _id: id}, req.body);
+    await Product.updateOne({ _id: id}, {
+        ...req.body,
+        $push: {updatedBy: updatedBy}
+    });
 
     req.flash("success", "Cập nhật sản phẩm thành công!!!!");   
 
