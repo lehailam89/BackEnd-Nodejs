@@ -19,7 +19,14 @@ module.exports.index = async (req, res) => {
 module.exports.detail = async (req, res) => {
     try{
         const slug = req.params.slug;
-        const product = await Product.findOne({slug: slug, deleted: false, status: "active"});
+        const product = await Product.findOne({
+            slug: slug, 
+            deleted: false, 
+            status: "active"
+        });
+
+        await 
+
         res.render("client/pages/products/detail", {
             pageTitle: "Chi tiết sản phẩm",
             product: product

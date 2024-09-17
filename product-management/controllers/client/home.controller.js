@@ -13,8 +13,18 @@ const productsFeatured = await Product.find({
 const newProductsFeatured = productsHelper.priceNewProducts(productsFeatured);
 
 //end code hiển thị danh sách sản phẩm nổi bật
+
+//Hiển thị sản phẩm mới nhất
+const productsNew = await Product.find({
+    deleted: false,
+    status: "active",
+}).sort({ position: "desc" }).limit(6);
+const newProductsNew= productsHelper.priceNewProducts(productsNew);
+//End hiển thị sản phẩm mới nhất
+
     res.render("client/pages/home/index.pug", {
         pageTitle: "Trang chủ",
-        productsFeatured: newProductsFeatured
+        productsFeatured: newProductsFeatured,
+        productsNew: newProductsNew
     })
 }
