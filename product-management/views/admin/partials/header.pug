@@ -6,11 +6,20 @@ header.header
                     a(href="/admin/dashboard") ADMIN
 
             .col-9
-                div(class="text-right")
+                div(class="d-flex justify-content-end align-items-center")
                     a(
                         href=`${prefixAdmin}/my-account`
-                        class="btn btn-primary btn-sm mr-2"
-                    ) #{user.fullName}
+                        class="d-inline-flex align-items-center"
+                        style="text-decoration: none; padding: 0 5px; margin-right: 10px; background: #fff; border-radius: 5px; "
+                    )
+                        img(
+                            src=`${user.avatar}`
+                            alt="User Avatar"
+                            class="avatar"
+                            style="width: 30px; height: 30px; border-radius: 50%; margin-right: 5px;"
+                        )
+                        span(style="font-size: 14px; color: #EB2524;") #{user.fullName}
+
                     a(
                         href=`${prefixAdmin}/auth/logout`
                         class="btn btn-danger btn-sm"
