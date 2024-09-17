@@ -1,4 +1,14 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product-layout.pug
 
 block main
-    h1 Chào mừng đến với tạp hoá EM U
+    h1(style="margin-left: 200px") Chào mừng đến với tạp hoá EM U
+
+    .section-products-featured.my-5
+        .container
+            .row 
+                .col-12
+                    +box-head("Sản phẩm nổi bật")
+
+            +product-grid(productsFeatured)

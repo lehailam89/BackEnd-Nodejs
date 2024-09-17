@@ -1,15 +1,17 @@
 const Product = require("../../models/product.model");
+const productsHelper = require("../../helpers/products.js");
 
 //[GET] /admin/products
 module.exports.index = async (req, res) => {
     const products = await Product.find({
         deleted: false
     }).sort({ position: "desc"});
- 
+
+    const newProducts = productsHelper.priceNewProducts(products);
 
     res.render("client/pages/products/index.pug", {
         pageTitle: "Danh sách sản phẩm",
-        products: products
+        products: newProducts
     })
 }
 
