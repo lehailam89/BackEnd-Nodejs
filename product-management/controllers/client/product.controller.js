@@ -64,26 +64,38 @@ module.exports.category = async (req, res) => {
 }
 
 
-//[GET] /admin/products/detail/:slug
+//[GET] /admin/products/detail/:slugProduct
 module.exports.detail = async (req, res) => {
-    try{
-        const slug = req.params.slug;
+    try {
+        const slug = req.params.slugProduct;
+
         const product = await Product.findOne({
-            slug: slug, 
-            deleted: false, 
+            slug: slug,
+            deleted: false,
             status: "active"
-        });
-
-        await 
-
-        res.render("client/pages/products/detail", {
-            pageTitle: "Chi tiết sản phẩm",
-            product: product
         })
-    } catch(error) {
-        if(!product){
-            req.flash("error", "Không tồn tại sản phẩm có slug này!");
-            res.redirect("/products");
+
+        if (product.product_category_id) {
+            const category = await ProductCategory.findOne({
+                _id: product.product_category_id,
+                deleted: false,
+                status: "active"
+            })
+            product.category = category
         }
+
+        product.priceNew = productsHelper.priceNewProduct(product)
+
+        if (!product)
+            return res.redirect('back')
+        // console.log(product)
+        res.render("client/pages/products/detail", {
+            pageTitle: 'Chi tiết sản phẩm',
+            product
+        });
+    } catch (error) {
+        console.log(error)
+        res.redirect("/")
     }
+
 }
