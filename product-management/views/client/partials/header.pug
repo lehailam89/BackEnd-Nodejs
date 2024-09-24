@@ -6,8 +6,26 @@ header.header
                 .inner-logo
                     a(href="/" class="d-flex align-items-center")
                         img(src="/images/logoLamMobiles.png", alt="Logo")
+
+            .col-5 
+                form(
+                    action="/search"
+                    method="GET"
+                )
+                    div(class="form-group d-flex mb-0")
+                        input(
+                            type="text"
+                            placeholder="Bạn cần tìm gì?"
+                            class="form-control"
+                            name="keyword"
+                            value=keyword
+                        )
+                        button(
+                            type="submit"
+                            class="btn btn-primary"
+                        ) 🔍
             
-            .col-9
+            .col-4 
                 .inner-menu
                     ul
                         li
