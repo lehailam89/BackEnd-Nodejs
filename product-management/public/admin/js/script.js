@@ -158,7 +158,6 @@ if(showAlert){
     });
 
 }
-
 //End Alert
 
 // Upload Image
