@@ -54,6 +54,7 @@ html, body {
     color: #DB0E0E;
     text-decoration: none;
     transition: all 0.3;
+    border: 1px solid #DB0E0E;
 }
 /* End Header */
 
