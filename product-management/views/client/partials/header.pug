@@ -12,18 +12,19 @@ header.header
                     action="/search"
                     method="GET"
                 )
-                    div(class="form-group d-flex mb-0")
+                    div(class="form-group d-flex mb-0 search-box")
+                        button(
+                            type="submit"
+                            class=""
+                        ) <i class="fa-solid fa-magnifying-glass"></i>
                         input(
                             type="text"
                             placeholder="Bạn cần tìm gì?"
-                            class="form-control"
+                            class="search-input"
                             name="keyword"
                             value=keyword
                         )
-                        button(
-                            type="submit"
-                            class="btn btn-primary"
-                        ) 🔍
+                        
             
             .col-4 
                 .inner-menu
@@ -36,4 +37,7 @@ header.header
                             if (layoutCategoryProducts)
                                 +sub-menu(layoutCategoryProducts, pathProduct)
                         li
-                            a(href="/cart") 🛒 #{miniCart ? miniCart.totalQuantity : "0"}
+                            a(href="/cart" class="mini-cart") 
+                                i(class="fa-solid fa-cart-shopping") 
+                                div(class="mini-cart-quantity")
+                                    | #{miniCart ? miniCart.totalQuantity : "0"}

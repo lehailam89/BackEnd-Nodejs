@@ -105,3 +105,42 @@
 .main{
     width: 88%;
 }
+
+/* Profile User */
+.user-box{
+    display: flex;
+}
+.user-image {
+    width: 250px; /* Đảm bảo ảnh có kích thước đồng nhất */
+    height: 250px; /* Đặt chiều cao bằng chiều rộng để tạo hình tròn */
+    border: 1px solid #ddd; /* Đường viền */
+    padding: 10px; /* Khoảng cách giữa viền và ảnh */
+    border-radius: 50%; /* Biến ảnh thành hình tròn */
+    object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
+}
+.user-box1{
+    border: 1px solid #ddd;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+.user-edit{
+    width: 250px; 
+}
+.user-name{
+    text-align: center;
+    font-size: 25px;
+}
+.user-box2{
+   margin-left: 50px;
+   border: 1px solid #ddd;
+   border-radius: 10px;
+   width: 100%;
+   padding: 40px;
+   font-size: 18px;
+   padding-top: 100px;
+}
+
+
+/* End Profice User  */

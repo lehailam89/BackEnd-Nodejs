@@ -58,6 +58,59 @@ html, body {
 }
 /* End Header */
 
+/* Search Box */
+.search-box{
+    border: 1px solid #ddd;
+    color: #fff;
+    border-radius: 30px;
+    padding: 10px 20px;
+    background: #dddddd20;
+}
+.search-box button{
+    background: none;
+    border: none;
+}
+.search-box .search-input{
+    border: none;
+    background: none;
+    width: 100%;
+    border-radius: 30px;
+    outline: none;
+}
+/* End Search Box */
+
+/* Mini Cart */
+.mini-cart {
+    display: flex;
+    align-items: center;
+    position: relative; /* Để định vị số lượng sản phẩm */
+    color: #fff; /* Đặt màu biểu tượng giỏ hàng */
+}
+
+.mini-cart i {
+    font-size: 22px; /* Tăng kích thước biểu tượng giỏ hàng */
+}
+
+.mini-cart-quantity {
+    position: absolute;
+    top: -8px; /* Điều chỉnh vị trí số lượng sản phẩm so với biểu tượng */
+    right: -10px;
+    border: 1px solid #fff;
+    background-color: #DB0E0E; /* Màu nền đỏ nổi bật */
+    color: #fff; /* Màu trắng cho chữ */
+    font-size: 12px;
+    font-weight: bold; /* Làm nổi bật số lượng sản phẩm */
+    padding: 2px 6px;
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 20px; /* Đảm bảo số lượng có không gian phù hợp */
+    min-height: 20px;
+}
+
+/* End Mini Cart */
+
 /* Footer */
 .footer {
     background: #333;
