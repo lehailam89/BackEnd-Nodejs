@@ -18,6 +18,7 @@ module.exports.registerPost  = (req, res, next) => {
     next();
 }
 
+//[POST] /login
 module.exports.loginPost  = (req, res, next) => {
     if(!req.body.email) {
         req.flash("error", "Email không được để trống!");

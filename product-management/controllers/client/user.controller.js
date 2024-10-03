@@ -60,13 +60,20 @@ module.exports.loginPost = async (req, res) => {
         return;
     }
 
-    if(user.status = "inactive"){
+    if(user.status === "inactive"){
         req.flash("error", "Tài khoản đã bị khóa!");
         res.redirect("back");
         return;
     }
 
     res.cookie("tokenUser", user.tokenUser);
+
+    res.redirect("/");
+}
+
+//[GET] /logout
+module.exports.logout  = (req, res) => {
+    res.clearCookie("tokenUser");
 
     res.redirect("/");
 }
