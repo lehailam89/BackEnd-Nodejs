@@ -28,6 +28,18 @@ html, body {
     width: 150px;
 }
 
+.header .inner-menu {
+    margin-left: -100px;
+}
+
+.header .inner-search {
+    margin-left: -100px;
+}
+
+.header .inner-search .search-box{
+    width: 90%;
+}
+
 .header .inner-menu > ul {
     list-style-type: none;
     padding: 0;
@@ -39,7 +51,7 @@ html, body {
 }
 
 .header .inner-menu > ul > li {
-    margin-left: 20px;
+    margin-left: 5px;
 }
 
 .header .inner-menu > ul > li > a {

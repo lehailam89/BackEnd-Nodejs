@@ -8,22 +8,23 @@ header.header
                         img(src="/images/logoLamMobiles.png", alt="Logo")
 
             .col-5 
-                form(
-                    action="/search"
-                    method="GET"
-                )
-                    div(class="form-group d-flex mb-0 search-box")
-                        button(
-                            type="submit"
-                            class=""
-                        ) <i class="fa-solid fa-magnifying-glass"></i>
-                        input(
-                            type="text"
-                            placeholder="Bạn cần tìm gì?"
-                            class="search-input"
-                            name="keyword"
-                            value=keyword
-                        )
+                .inner-search
+                    form(
+                        action="/search"
+                        method="GET"
+                    )
+                        div(class="form-group d-flex mb-0 search-box")
+                            button(
+                                type="submit"
+                                class=""
+                            ) <i class="fa-solid fa-magnifying-glass"></i>
+                            input(
+                                type="text"
+                                placeholder="Bạn cần tìm gì?"
+                                class="search-input"
+                                name="keyword"
+                                value=keyword
+                            )
                         
             
             .col-4 
@@ -41,3 +42,7 @@ header.header
                                 i(class="fa-solid fa-cart-shopping") 
                                 div(class="mini-cart-quantity")
                                     | #{miniCart ? miniCart.totalQuantity : "0"}
+                        li 
+                            a(href="/user/register") Đăng kí
+                        li
+                            a(href="/user/login") Đăng nhập
