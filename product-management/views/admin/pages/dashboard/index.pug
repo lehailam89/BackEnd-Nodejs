@@ -6,23 +6,28 @@ block main
     p(style="font-size: 30px; color: #EB2524") Xin chào #{user.fullName}!!
 
     .row.mt-4
-    .col-12
-      .card.mb-4
-        .card-header Thông tin tài khoản
-        .card-body
-          if(user.avatar)
-            img(
-              src=user.avatar
-              style="height: 100px;margin-bottom: 15px;"
-            )
-          if(user.fullName)
-            p Họ tên: <b>#{user.fullName}</b>
-          if(user.email)
-            p Email: <b>#{user.email}</b>
-          if(user.phone)
-            p Số điện thoại: <b>#{user.phone}</b>
-          if(role.title)
-            p Phân quyền: <b>#{role.title}</b>
+      .col-12
+        .card.mb-4
+          .card-header Thông tin tài khoản
+          .card-body
+            div.user-top(style="display: flex; align-items: center;")
+              if(user.avatar)
+                img(
+                  src=user.avatar
+                )
+              div.user-top1
+                if(user.fullName)
+                  p.user-fullname <b>#{user.fullName}</b>
+                if(user.email)
+                  p.user-email(style="font-size: 15px") #{user.email}
+            div.user-top2
+              if(user.phone)
+                p <b>Số điện thoại:</b>
+                p.user-phone #{user.phone}
+              if(role.title)
+                p <b>Phân quyền:</b>
+                p.user-role  #{role.title}
+
 
 
     .row
