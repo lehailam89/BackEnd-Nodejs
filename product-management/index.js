@@ -42,6 +42,13 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 app.locals.moment = moment;
 
+// Middleware to get current URL and pass it to Pug templates
+app.use((req, res, next) => {
+    res.locals.currentUrl = req.originalUrl; // Lấy URL hiện tại
+    next();
+});
+
+
 //! config ulr encoded
 app.use(bodyPraser.urlencoded({extended: true}))
 

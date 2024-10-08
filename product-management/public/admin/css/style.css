@@ -50,6 +50,13 @@
 .sider .inner-menu ul li a:hover{ 
     color: #db0e0e;
 }
+.sider .inner-menu ul li a.active {
+    color: #fff;
+    background-color: #db0e0e;; /* Màu nền nổi bật */
+    font-weight: bold; /* Làm đậm chữ */
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
 
 
 /* End Sider */
