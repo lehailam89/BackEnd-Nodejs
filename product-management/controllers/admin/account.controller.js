@@ -75,7 +75,9 @@ module.exports.editPatch = async (req, res) => {
         delete req.body.password;
     }
     
-    Account.updateOne({ _id: req.params.id }, req.body);
+    await Account.updateOne({ _id: req.params.id }, req.body);
+
+    req.flash("success", "Cập nhật thành công!");
 
     res.redirect("back");
 };
