@@ -406,7 +406,7 @@ header {
     position: fixed;
     top: 70px;
     right: 15px;
-    z-index: 999;
+    z-index: 9999;
 }
 
 [show-alert].alert-hidden{
