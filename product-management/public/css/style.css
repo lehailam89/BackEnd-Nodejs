@@ -447,3 +447,73 @@ header {
     background: #fff;
 }
 /* End Login */
+
+/* Page 404 */
+
+
+.container-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Căn giữa nội dung theo chiều dọc */
+    text-align: center;
+    padding: 2rem;
+    background-color: #F3F4F6;
+}
+
+.title-404 {
+    font-size: 9rem;
+    font-weight: bold;
+    margin: 0;
+    color: #DC2626;
+}
+
+.content-404 {
+    font-size: 2rem;
+    margin: 1rem 0;
+    color: #991B1B;
+}
+
+.content2-404 {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    text-align: center;
+    color: #991B1B;
+    line-height: 1.5;
+}
+
+.button-404 {
+    background-color: #DC2626;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-404:hover {
+    background-color: #B91C1C;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .title-404 {
+        font-size: 6rem;
+    }
+
+    .content-404 {
+        font-size: 1.5rem;
+    }
+
+    .content2-404 {
+        font-size: 0.9rem;
+        max-width: 300px;
+    }
+}
+/* End Page 404 */
