@@ -15,8 +15,18 @@ io.on('connection', (socket) => {
   socket.emit("SERVER_SEND_SOCKET_ID", socket.id);
 
   socket.on("CLIENT_SEND_MESSAGE", (data) => {
-    
+
+    //khi A gửi data lên server, server chỉ trả về cho A
+    //Ví dụ: Khi A gửi tin nhắn nhưng bị lỗi, server chỉ trả về cho A
+    //socket.emit("SERVER_RETURN_MESSAGE", data);
+
+    //Khi A gửi data lên server, server trả về cho cả B, C, D,...
+    //Ví dụ: Tin nhắn chat
     io.emit("SERVER_RETURN_MESSAGE", data);
+
+    //Khi A gửi data lên server, server trả về cho cả B, C, D,... nhưng không trả về cho A
+    //Ví dụ: Typing...(dấu 3 chấm nháy nháy khi đang nhắn tin)
+    //socket.broadcast.emit("SERVER_RETURN_MESSAGE", data);
     });
 });
 
