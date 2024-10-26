@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const moment = require('moment')
 const path = require('path');
+const http = require('http');
+const { Server } = require("socket.io");
 
 
 database.connect()
@@ -22,6 +24,13 @@ const port = process.env.PORT;
 //! config view
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
+
+// SocketIO
+const server = http.createServer(app);
+const io = new Server(server);
+global._io = io;
+
+
 
 //! config method override
 app.use(methodOverride('_method'))
@@ -62,6 +71,6 @@ app.get("*", (req, res) => {
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on http://127.0.0.1:${port}`)
 })
