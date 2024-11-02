@@ -17,23 +17,32 @@ if (formSendData) {
 socket.on("SERVER_RETURN_MESSAGE", (data) => {
     const myId = document.querySelector("[my-id]").getAttribute("my-id");
 
-    const body = document.querySelector('.chat .inner-body');
+        const body = document.querySelector('.chat .inner-body');
 
-    const div = document.createElement("div");
+        const div = document.createElement("div");
 
-    let htmlFullName = "";
+        let htmlFullName = "";
 
-    if(myId == data.userId) {
-        div.classList.add("inner-outgoing");
-    } else {
-        div.classList.add("inner-incoming");
-        htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
-    }
-    div.innerHTML=`
-        ${htmlFullName}
-        <div class="inner-content">${data.content}</div>
-    `;
+        if(myId == data.userId) {
+            div.classList.add("inner-outgoing");
+        } else {
+            div.classList.add("inner-incoming");
+            htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
+        }
+        div.innerHTML=`
+            ${htmlFullName}
+            <div class="inner-content">${data.content}</div> 
+        `;
 
     body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
 });
 //END SERVER_RETURN_MESSAGE
+
+//SCROLL CHAT TO BOTTOM
+const bodyChat = document.querySelector('.chat .inner-body');
+if(bodyChat) {
+    bodyChat.scrollTop = bodyChat.scrollHeight;
+}
+
+//END SCROLL CHAT TO BOTTOM
