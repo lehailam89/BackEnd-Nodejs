@@ -3,6 +3,9 @@ include ../../mixins/box-head.pug
 
 block main
   .container.my-3
+    
+    include ../../partials/list-btn-users.pug
+
     .row
       .col-12
         +box-head("Chat")
@@ -37,4 +40,7 @@ block main
                 i.fa-solid.fa-paper-plane
   
   div(class="tooltip" role="tooltip")
-    emoji-picker(class="light")
+    emoji-picker(class="light") 
+
+  
+  
