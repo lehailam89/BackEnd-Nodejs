@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { TASKS_API_URL} from '../config.js'; // Import URL API
 
 const TaskDetail = ({ taskId, onClose }) => {
   const [taskDetail, setTaskDetail] = useState(null);
@@ -7,7 +8,7 @@ const TaskDetail = ({ taskId, onClose }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/tasks/detail/${taskId}`)
+      .get(TASKS_API_URL + `/detail/${taskId}`)
       .then((response) => {
         setTaskDetail(response.data);
         setLoading(false);

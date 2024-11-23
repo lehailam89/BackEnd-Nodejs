@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TaskDetail from './TaskDetail'; // Import component TaskDetail
 import './Task.css'; // Tạo file CSS riêng nếu cần
+import { TASKS_API_URL} from '../config.js'; // Import URL API
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,7 +12,7 @@ const Tasks = () => {
   useEffect(() => {
     // Gọi API để lấy dữ liệu
     axios
-      .get('http://localhost:3000/tasks')
+      .get(TASKS_API_URL)
       .then((response) => {
         setTasks(response.data);
         setLoading(false);
