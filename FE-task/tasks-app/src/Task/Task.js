@@ -8,21 +8,31 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(''); // State để lưu trạng thái đã chọn
+  const [sortKey, setSortKey] = useState(''); // State để lưu tiêu chí sắp xếp
+  const [sortValue, setSortValue] = useState(''); // State để lưu giá trị sắp xếp
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusParam = params.get('status');
+    const sortKeyParam = params.get('sortKey');
+    const sortValueParam = params.get('sortValue');
     if (statusParam) {
       setStatus(statusParam);
+    }
+    if (sortKeyParam) {
+      setSortKey(sortKeyParam);
+    }
+    if (sortValueParam) {
+      setSortValue(sortValueParam);
     }
   }, [location.search]);
 
   useEffect(() => {
     // Gọi API để lấy dữ liệu
     axios
-      .get(`${TASKS_API_URL}?status=${status}`)
+      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}`)
       .then((response) => {
         setTasks(response.data);
         setLoading(false);
@@ -32,15 +42,22 @@ const Tasks = () => {
         setLoading(false);
       });
 
-    // Cập nhật URL khi status thay đổi
+    // Cập nhật URL khi status hoặc sortKey hoặc sortValue thay đổi
     const params = new URLSearchParams(location.search);
     if (status) {
       params.set('status', status);
     } else {
       params.delete('status');
     }
+    if (sortKey && sortValue) {
+      params.set('sortKey', sortKey);
+      params.set('sortValue', sortValue);
+    } else {
+      params.delete('sortKey');
+      params.delete('sortValue');
+    }
     navigate({ search: params.toString() });
-  }, [status, navigate, location.search]);
+  }, [status, sortKey, sortValue, navigate, location.search]);
 
   if (loading) {
     return <div>Đang tải dữ liệu...</div>;
@@ -62,6 +79,27 @@ const Tasks = () => {
           <option value="finish">finish</option>
           <option value="pending">pending</option>
           <option value="notFinish">notFinish</option>
+        </select>
+      </div>
+      <div className="sort-container">
+        <label htmlFor="sortKey">Sắp xếp theo:</label>
+        <select
+          id="sortKey"
+          value={sortKey}
+          onChange={(e) => setSortKey(e.target.value)}
+        >
+          <option value="">Chọn tiêu chí</option>
+          <option value="title">Tiêu đề</option>
+          <option value="createdAt">Ngày tạo</option>
+        </select>
+        <select
+          id="sortValue"
+          value={sortValue}
+          onChange={(e) => setSortValue(e.target.value)}
+        >
+          <option value="">Chọn thứ tự</option>
+          <option value="asc">Tăng dần</option>
+          <option value="desc">Giảm dần</option>
         </select>
       </div>
       <ul>
