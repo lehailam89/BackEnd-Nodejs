@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TASKS_API_URL} from '../config.js'; // Import URL API
+import { useParams, useNavigate } from 'react-router-dom';
+import { TASKS_API_URL } from '../config.js'; // Import URL API
 
-const TaskDetail = ({ taskId, onClose }) => {
+const TaskDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [taskDetail, setTaskDetail] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get(TASKS_API_URL + `/detail/${taskId}`)
+      .get(`${TASKS_API_URL}/detail/${id}`)
       .then((response) => {
         setTaskDetail(response.data);
         setLoading(false);
@@ -17,7 +20,7 @@ const TaskDetail = ({ taskId, onClose }) => {
         console.error("Lỗi khi gọi API chi tiết công việc:", error);
         setLoading(false);
       });
-  }, [taskId]);
+  }, [id]);
 
   if (loading) {
     return <div>Đang tải dữ liệu...</div>;
@@ -36,7 +39,7 @@ const TaskDetail = ({ taskId, onClose }) => {
       <p>Content: {taskDetail.content}</p>
       <p>Start Time: {new Date(taskDetail.timeStart).toLocaleDateString()}</p>
       <p>End Time: {new Date(taskDetail.timeFinish).toLocaleDateString()}</p>
-      <button onClick={onClose}>Đóng</button>
+      <button onClick={() => navigate('/tasks')}>Đóng</button>
     </div>
   );
 };

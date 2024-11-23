@@ -1,12 +1,17 @@
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Tasks from './Task/Task.js';
+import TaskDetail from './Task/TaskDetail.js';
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <Tasks />
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path="/tasks" element={<Tasks />} />
+        <Route path="/tasks/:id" element={<TaskDetail />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
