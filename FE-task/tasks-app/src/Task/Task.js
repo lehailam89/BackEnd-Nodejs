@@ -10,6 +10,8 @@ const Tasks = () => {
   const [status, setStatus] = useState(''); // State để lưu trạng thái đã chọn
   const [sortKey, setSortKey] = useState(''); // State để lưu tiêu chí sắp xếp
   const [sortValue, setSortValue] = useState(''); // State để lưu giá trị sắp xếp
+  const [currentPage, setCurrentPage] = useState(1); // State để lưu trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // State để lưu tổng số trang
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,6 +20,7 @@ const Tasks = () => {
     const statusParam = params.get('status');
     const sortKeyParam = params.get('sortKey');
     const sortValueParam = params.get('sortValue');
+    const pageParam = params.get('page');
     if (statusParam) {
       setStatus(statusParam);
     }
@@ -27,14 +30,18 @@ const Tasks = () => {
     if (sortValueParam) {
       setSortValue(sortValueParam);
     }
+    if (pageParam) {
+      setCurrentPage(parseInt(pageParam, 10));
+    }
   }, [location.search]);
 
   useEffect(() => {
     // Gọi API để lấy dữ liệu
     axios
-      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}`)
+      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}`)
       .then((response) => {
-        setTasks(response.data);
+        setTasks(response.data.tasks || []);
+        setTotalPages(response.data.totalPages || 1);
         setLoading(false);
       })
       .catch((error) => {
@@ -42,7 +49,7 @@ const Tasks = () => {
         setLoading(false);
       });
 
-    // Cập nhật URL khi status hoặc sortKey hoặc sortValue thay đổi
+    // Cập nhật URL khi status, sortKey, sortValue hoặc currentPage thay đổi
     const params = new URLSearchParams(location.search);
     if (status) {
       params.set('status', status);
@@ -56,8 +63,15 @@ const Tasks = () => {
       params.delete('sortKey');
       params.delete('sortValue');
     }
+    params.set('page', currentPage);
     navigate({ search: params.toString() });
-  }, [status, sortKey, sortValue, navigate, location.search]);
+  }, [status, sortKey, sortValue, currentPage, navigate, location.search]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   if (loading) {
     return <div>Đang tải dữ liệu...</div>;
@@ -110,6 +124,15 @@ const Tasks = () => {
           </li>
         ))}
       </ul>
+      <div className="pagination-container">
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          Trang trước
+        </button>
+        <span>Trang {currentPage} / {totalPages}</span>
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          Trang sau
+        </button>
+      </div>
     </div>
   );
 };
