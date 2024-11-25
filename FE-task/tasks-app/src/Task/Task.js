@@ -12,6 +12,7 @@ const Tasks = () => {
   const [sortValue, setSortValue] = useState(''); // State để lưu giá trị sắp xếp
   const [currentPage, setCurrentPage] = useState(1); // State để lưu trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // State để lưu tổng số trang
+  const [keyword, setKeyword] = useState(''); // State để lưu từ khóa tìm kiếm
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,6 +22,7 @@ const Tasks = () => {
     const sortKeyParam = params.get('sortKey');
     const sortValueParam = params.get('sortValue');
     const pageParam = params.get('page');
+    const keywordParam = params.get('keyword');
     if (statusParam) {
       setStatus(statusParam);
     }
@@ -33,12 +35,15 @@ const Tasks = () => {
     if (pageParam) {
       setCurrentPage(parseInt(pageParam, 10));
     }
+    if (keywordParam) {
+      setKeyword(keywordParam);
+    }
   }, [location.search]);
 
   useEffect(() => {
     // Gọi API để lấy dữ liệu
     axios
-      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}`)
+      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}&keyword=${keyword}`)
       .then((response) => {
         setTasks(response.data.tasks || []);
         setTotalPages(response.data.totalPages || 1);
@@ -49,7 +54,7 @@ const Tasks = () => {
         setLoading(false);
       });
 
-    // Cập nhật URL khi status, sortKey, sortValue hoặc currentPage thay đổi
+    // Cập nhật URL khi status, sortKey, sortValue, currentPage hoặc keyword thay đổi
     const params = new URLSearchParams(location.search);
     if (status) {
       params.set('status', status);
@@ -63,14 +68,24 @@ const Tasks = () => {
       params.delete('sortKey');
       params.delete('sortValue');
     }
+    if (keyword) {
+      params.set('keyword', keyword);
+    } else {
+      params.delete('keyword');
+    }
     params.set('page', currentPage);
     navigate({ search: params.toString() });
-  }, [status, sortKey, sortValue, currentPage, navigate, location.search]);
+  }, [status, sortKey, sortValue, currentPage, keyword, navigate, location.search]);
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setKeyword(e.target.elements.keyword.value);
   };
 
   if (loading) {
@@ -115,6 +130,17 @@ const Tasks = () => {
           <option value="asc">Tăng dần</option>
           <option value="desc">Giảm dần</option>
         </select>
+      </div>
+      <div className="search-container">
+        <form onSubmit={handleSearch}>
+          <input
+            type="text"
+            name="keyword"
+            placeholder="Tìm kiếm công việc"
+            defaultValue={keyword}
+          />
+          <button type="submit">Tìm kiếm</button>
+        </form>
       </div>
       <ul>
         {tasks.map((task) => (
