@@ -166,6 +166,31 @@ const Tasks = () => {
     }
   };
 
+  const handleDeleteMultiTasks = () => {
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa các nhiệm vụ đã chọn?");
+    if (confirmDelete) {
+      axios
+        .patch(`${TASKS_API_URL}/change-multi`, {
+          ids: selectedTasks,
+          key: 'delete',
+          value: true,
+        })
+        .then((response) => {
+          if (response.data.code === 200) {
+            setTasks((prevTasks) => prevTasks.filter((task) => !selectedTasks.includes(task._id)));
+            setNotification('Xóa nhiều nhiệm vụ thành công!');
+            setTimeout(() => setNotification(''), 3000); // Ẩn thông báo sau 3 giây
+            setSelectedTasks([]); // Xóa các nhiệm vụ đã chọn sau khi xóa
+          } else {
+            console.error("Lỗi khi xóa nhiều nhiệm vụ:", response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi gọi API:", error);
+        });
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -241,6 +266,9 @@ const Tasks = () => {
         </select>
         <button onClick={handleChangeMultiStatus} disabled={!selectedTasks.length || !multiStatus}>
           Cập nhật trạng thái
+        </button>
+        <button onClick={handleDeleteMultiTasks} disabled={!selectedTasks.length} className="btn btn-danger">
+          Xóa nhiều nhiệm vụ
         </button>
       </div>
       <button onClick={() => navigate('/tasks/create')} className="btn btn-primary">
