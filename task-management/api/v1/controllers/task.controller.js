@@ -133,3 +133,45 @@ module.exports.create = async (req, res) => {
         });
     }
 };
+
+//[PATCH] /api/v1/edit/:id
+module.exports.edit = async (req, res) => {
+    try{
+        const id = req.params.id;
+
+        await Task.updateOne({ _id: id}, req.body);
+        
+        res.json({
+            code: 200,
+            message: "Cập nhật nhiệm vụ thành công!!"
+        })
+    }catch (error) {
+        res.json({
+            code: 400,
+            message: "Lỗi!"
+        })
+    }
+}
+
+//[DELETE] /api/v1/delete/:id
+module.exports.delete = async (req, res) => {
+    try{
+        const id = req.params.id;
+
+        await Task.updateOne({ _id: id}, 
+            {
+                deleted: true,
+                deletedAt: new Date()
+            });
+        
+        res.json({
+            code: 200,
+            message: "Xoá nhiệm vụ thành công"
+        })
+    }catch (error) {
+        res.json({
+            code: 400,
+            message: "Lỗi!"
+        })
+    }
+}

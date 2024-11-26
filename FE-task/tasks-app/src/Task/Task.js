@@ -80,17 +80,6 @@ const Tasks = () => {
     navigate({ search: params.toString() });
   }, [status, sortKey, sortValue, currentPage, keyword, navigate, location.search]);
 
-  useEffect(() => {
-    const notification = localStorage.getItem('notification');
-    if (notification) {
-      setNotification(notification);
-      localStorage.removeItem('notification');
-      setTimeout(() => {
-        setNotification('');
-      }, 3000); // Ẩn thông báo sau 3 giây
-    }
-  }, []);
-
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -155,6 +144,26 @@ const Tasks = () => {
       .catch((error) => {
         console.error("Lỗi khi gọi API:", error);
       });
+  };
+
+  const handleDeleteTask = (taskId) => {
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa nhiệm vụ này?");
+    if (confirmDelete) {
+      axios
+        .delete(`${TASKS_API_URL}/delete/${taskId}`)
+        .then((response) => {
+          if (response.data.code === 200) {
+            setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+            setNotification('Xóa nhiệm vụ thành công!');
+            setTimeout(() => setNotification(''), 3000); // Ẩn thông báo sau 3 giây
+          } else {
+            console.error("Lỗi khi xóa nhiệm vụ:", response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi gọi API:", error);
+        });
+    }
   };
 
   if (loading) {
@@ -258,6 +267,8 @@ const Tasks = () => {
               <option value="notFinish">Not Finish</option>
             </select>
             <button onClick={() => navigate(`/tasks/${task._id}`)}>Xem chi tiết</button>
+            <button onClick={() => navigate(`/tasks/edit/${task._id}`)}>Chỉnh sửa</button>
+            <button onClick={() => handleDeleteTask(task._id)} className="btn btn-danger">Xóa</button>
           </li>
         ))}
       </ul>
