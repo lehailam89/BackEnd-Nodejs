@@ -13,6 +13,7 @@ const Tasks = () => {
   const [currentPage, setCurrentPage] = useState(1); // State để lưu trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // State để lưu tổng số trang
   const [keyword, setKeyword] = useState(''); // State để lưu từ khóa tìm kiếm
+  const [notification, setNotification] = useState(''); // State để lưu thông báo
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -88,13 +89,48 @@ const Tasks = () => {
     setKeyword(e.target.elements.keyword.value);
   };
 
+  const handleChangeStatus = (taskId, newStatus) => {
+    axios
+      .patch(`${TASKS_API_URL}/change-status/${taskId}`, { status: newStatus })
+      .then((response) => {
+        if (response.data.code === 200) {
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task._id === taskId ? { ...task, status: newStatus } : task
+            )
+          );
+          setNotification('Cập nhật trạng thái thành công!');
+          setTimeout(() => setNotification(''), 3000); // Ẩn thông báo sau 3 giây
+        } else {
+          console.error("Lỗi khi cập nhật trạng thái:", response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API:", error);
+      });
+  };
+
+  const handleCloseNotification = () => {
+    setNotification('');
+  };
+
   if (loading) {
-    return <div>Đang tải dữ liệu...</div>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   return (
     <div className="tasks-container">
       <h1>Danh sách công việc</h1>
+      {notification && (
+        <div className="notification">
+          {notification}
+          <button className="close-btn" onClick={handleCloseNotification}>×</button>
+        </div>
+      )}
       <div className="filter-container">
         <label htmlFor="status">Lọc theo trạng thái:</label>
         <select
@@ -146,6 +182,17 @@ const Tasks = () => {
         {tasks.map((task) => (
           <li key={task._id} className={`task-item ${task.status}`}>
             <h2>{task.title}</h2>
+            <p>{task.status}</p>
+            <select
+              value={task.status}
+              onChange={(e) => handleChangeStatus(task._id, e.target.value)}
+            >
+              <option value="initial">Initial</option>
+              <option value="doing">Doing</option>
+              <option value="finish">Finish</option>
+              <option value="pending">Pending</option>
+              <option value="notFinish">Not Finish</option>
+            </select>
             <button onClick={() => navigate(`/tasks/${task._id}`)}>Xem chi tiết</button>
           </li>
         ))}

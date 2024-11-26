@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const database = require('./config/database');
 require('dotenv').config();
@@ -8,6 +9,9 @@ app.use(cors()); // Bật CORS cho tất cả các nguồn
 const port = process.env.PORT || 3000; 
 
 database.connect();
+
+//parse application/json
+app.use(bodyParser.json());
 
 //Router version 1
 routesApiVer1(app);

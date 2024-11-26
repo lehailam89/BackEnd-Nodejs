@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TASKS_API_URL } from '../config.js'; // Import URL API
+import './Task.css'; // Import CSS
 
 const TaskDetail = () => {
   const { id } = useParams();
@@ -23,7 +24,11 @@ const TaskDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Đang tải dữ liệu...</div>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   if (!taskDetail) {
@@ -31,14 +36,14 @@ const TaskDetail = () => {
   }
 
   return (
-    <div className="task-detail">
+    <div className="task-detail-container">
       <h2>Chi tiết công việc</h2>
-      <p>ID: {taskDetail._id}</p>
-      <p>Title: {taskDetail.title}</p>
-      <p>Status: {taskDetail.status}</p>
-      <p>Content: {taskDetail.content}</p>
-      <p>Start Time: {new Date(taskDetail.timeStart).toLocaleDateString()}</p>
-      <p>End Time: {new Date(taskDetail.timeFinish).toLocaleDateString()}</p>
+      <p><strong>ID:</strong> {taskDetail._id}</p>
+      <p><strong>Title:</strong> {taskDetail.title}</p>
+      <p><strong>Status:</strong> {taskDetail.status}</p>
+      <p><strong>Content:</strong> {taskDetail.content}</p>
+      <p><strong>Start Time:</strong> {new Date(taskDetail.timeStart).toLocaleDateString()}</p>
+      <p><strong>End Time:</strong> {new Date(taskDetail.timeFinish).toLocaleDateString()}</p>
       <button onClick={() => navigate('/tasks')}>Đóng</button>
     </div>
   );
