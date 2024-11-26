@@ -80,6 +80,17 @@ const Tasks = () => {
     navigate({ search: params.toString() });
   }, [status, sortKey, sortValue, currentPage, keyword, navigate, location.search]);
 
+  useEffect(() => {
+    const notification = localStorage.getItem('notification');
+    if (notification) {
+      setNotification(notification);
+      localStorage.removeItem('notification');
+      setTimeout(() => {
+        setNotification('');
+      }, 3000); // Ẩn thông báo sau 3 giây
+    }
+  }, []);
+
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -223,6 +234,9 @@ const Tasks = () => {
           Cập nhật trạng thái
         </button>
       </div>
+      <button onClick={() => navigate('/tasks/create')} className="btn btn-primary">
+        Tạo công việc mới
+      </button>
       <ul>
         {tasks.map((task) => (
           <li key={task._id} className={`task-item ${task.status}`}>
