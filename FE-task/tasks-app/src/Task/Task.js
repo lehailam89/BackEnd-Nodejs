@@ -14,6 +14,8 @@ const Tasks = () => {
   const [totalPages, setTotalPages] = useState(1); // State để lưu tổng số trang
   const [keyword, setKeyword] = useState(''); // State để lưu từ khóa tìm kiếm
   const [notification, setNotification] = useState(''); // State để lưu thông báo
+  const [selectedTasks, setSelectedTasks] = useState([]); // State để lưu các nhiệm vụ đã chọn
+  const [multiStatus, setMultiStatus] = useState(''); // State để lưu trạng thái mới cho các nhiệm vụ đã chọn
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -110,8 +112,38 @@ const Tasks = () => {
       });
   };
 
-  const handleCloseNotification = () => {
-    setNotification('');
+  const handleSelectTask = (taskId) => {
+    setSelectedTasks((prevSelectedTasks) =>
+      prevSelectedTasks.includes(taskId)
+        ? prevSelectedTasks.filter((id) => id !== taskId)
+        : [...prevSelectedTasks, taskId]
+    );
+  };
+
+  const handleChangeMultiStatus = () => {
+    axios
+      .patch(`${TASKS_API_URL}/change-multi`, {
+        ids: selectedTasks,
+        key: 'status',
+        value: multiStatus,
+      })
+      .then((response) => {
+        if (response.data.code === 200) {
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              selectedTasks.includes(task._id) ? { ...task, status: multiStatus } : task
+            )
+          );
+          setNotification('Cập nhật trạng thái nhiều nhiệm vụ thành công!');
+          setTimeout(() => setNotification(''), 3000); // Ẩn thông báo sau 3 giây
+          setSelectedTasks([]); // Xóa các nhiệm vụ đã chọn sau khi cập nhật
+        } else {
+          console.error("Lỗi khi cập nhật trạng thái nhiều nhiệm vụ:", response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API:", error);
+      });
   };
 
   if (loading) {
@@ -125,12 +157,7 @@ const Tasks = () => {
   return (
     <div className="tasks-container">
       <h1>Danh sách công việc</h1>
-      {notification && (
-        <div className="notification">
-          {notification}
-          <button className="close-btn" onClick={handleCloseNotification}>×</button>
-        </div>
-      )}
+      {notification && <div className="notification">{notification}</div>}
       <div className="filter-container">
         <label htmlFor="status">Lọc theo trạng thái:</label>
         <select
@@ -178,9 +205,32 @@ const Tasks = () => {
           <button type="submit">Tìm kiếm</button>
         </form>
       </div>
+      <div className="multi-status-container">
+        <label htmlFor="multiStatus">Đổi trạng thái nhiều nhiệm vụ:</label>
+        <select
+          id="multiStatus"
+          value={multiStatus}
+          onChange={(e) => setMultiStatus(e.target.value)}
+        >
+          <option value="">Chọn trạng thái</option>
+          <option value="initial">Initial</option>
+          <option value="doing">Doing</option>
+          <option value="finish">Finish</option>
+          <option value="pending">Pending</option>
+          <option value="notFinish">Not Finish</option>
+        </select>
+        <button onClick={handleChangeMultiStatus} disabled={!selectedTasks.length || !multiStatus}>
+          Cập nhật trạng thái
+        </button>
+      </div>
       <ul>
         {tasks.map((task) => (
           <li key={task._id} className={`task-item ${task.status}`}>
+            <input
+              type="checkbox"
+              checked={selectedTasks.includes(task._id)}
+              onChange={() => handleSelectTask(task._id)}
+            />
             <h2>{task.title}</h2>
             <p>{task.status}</p>
             <select
