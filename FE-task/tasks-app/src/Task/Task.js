@@ -274,6 +274,9 @@ const Tasks = () => {
       <button onClick={() => navigate('/tasks/create')} className="btn btn-primary">
         Tạo công việc mới
       </button>
+      <button onClick={() => navigate('/users/detail')} className="btn btn-secondary">
+        Xem thông tin cá nhân
+      </button>
       <ul>
         {tasks.map((task) => (
           <li key={task._id} className={`task-item ${task.status}`}>

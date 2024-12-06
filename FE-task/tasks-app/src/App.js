@@ -9,6 +9,7 @@ import Login from './User/Login'; // Import component Login
 import ForgotPassword from './User/ForgotPassword'; // Import component ForgotPassword
 import OtpPassword from './User/OtpPassword'; // Import component OtpPassword
 import ResetPassword from './User/ResetPassword'; // Import component ResetPassword
+import UserInfo from './User/UserInfo'; // Import component UserInfo
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/users/password/forgot" element={<ForgotPassword />} />
         <Route path="/users/password/otp" element={<OtpPassword />} />
         <Route path="/users/password/reset" element={<ResetPassword />} />
+        <Route path="/users/detail" element={<UserInfo />} />
       </Routes>
     </Router>
   );

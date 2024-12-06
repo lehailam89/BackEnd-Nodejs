@@ -15,7 +15,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`${API_BASE_URL}/users/login`, user)
+      .post(`${API_BASE_URL}/users/login`, user, { withCredentials: true })
       .then((response) => {
         if (response.data.code === 200) {
           setNotification('Đăng nhập thành công!');
@@ -46,6 +46,7 @@ const Login = () => {
             value={user.email}
             onChange={(e) => setUser({ ...user, email: e.target.value })}
             required
+            autoComplete="current-email"
           />
         </div>
         <div className="form-group">
@@ -56,20 +57,14 @@ const Login = () => {
             value={user.password}
             onChange={(e) => setUser({ ...user, password: e.target.value })}
             required
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">Đăng nhập</button>
       </form>
-    <p className="register-link">
-        Chưa có tài khoản? 
-        <span 
-        className="register-hover" 
-        onClick={() => navigate('/users/register')}
-            >
-            Đăng ký
-        </span>
-    </p>
-
+      <p className="register-link">
+        Chưa có tài khoản? <span onClick={() => navigate('/register')}>Đăng ký</span>
+      </p>
     </div>
   );
 };
