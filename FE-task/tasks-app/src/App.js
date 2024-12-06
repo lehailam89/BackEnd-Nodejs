@@ -5,6 +5,10 @@ import TaskDetail from './Task/TaskDetail.js';
 import CreateTask from './Task/CreateTask.js'; // Import component CreateTask
 import EditTask from './Task/EditTask'; // Import component EditTask
 import Register from './User/Register';
+import Login from './User/Login'; // Import component Login
+import ForgotPassword from './User/ForgotPassword'; // Import component ForgotPassword
+import OtpPassword from './User/OtpPassword'; // Import component OtpPassword
+import ResetPassword from './User/ResetPassword'; // Import component ResetPassword
 
 const App = () => {
   return (
@@ -15,6 +19,10 @@ const App = () => {
         <Route path="/tasks/create" element={<CreateTask/>} />
         <Route path="/tasks/edit/:id" element={<EditTask/>} />
         <Route path="/users/register" element={<Register />} />
+        <Route path="/users/login" element={<Login />} />
+        <Route path="/users/password/forgot" element={<ForgotPassword />} />
+        <Route path="/users/password/otp" element={<OtpPassword />} />
+        <Route path="/users/password/reset" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

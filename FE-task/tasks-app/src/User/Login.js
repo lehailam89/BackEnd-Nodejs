@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config.js'; // Import URL API
-import './Register.css'; // Import CSS
+import './Login.css'; // Import CSS
 
-const Register = () => {
+const Login = () => {
   const [user, setUser] = useState({
-    fullName: '',
     email: '',
     password: ''
   }); // State để lưu thông tin người dùng
   const [notification, setNotification] = useState(''); // State để lưu thông báo
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`${API_BASE_URL}/users/register`, user)
+      .post(`${API_BASE_URL}/users/login`, user)
       .then((response) => {
         if (response.data.code === 200) {
-          setNotification('Đăng ký thành công!');
+          setNotification('Đăng nhập thành công!');
           setTimeout(() => {
             setNotification('');
             navigate('/tasks'); // Điều hướng về trang danh sách công việc
@@ -35,20 +34,10 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Đăng ký tài khoản</h2>
+    <div className="login-container">
+      <h2>Đăng nhập tài khoản</h2>
       {notification && <div className="notification">{notification}</div>}
-      <form onSubmit={handleRegister}>
-        <div className="form-group">
-          <label htmlFor="fullName">Họ và tên</label>
-          <input
-            type="text"
-            id="fullName"
-            value={user.fullName}
-            onChange={(e) => setUser({ ...user, fullName: e.target.value })}
-            required
-          />
-        </div>
+      <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -69,19 +58,20 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit">Đăng ký</button>
+        <button type="submit">Đăng nhập</button>
       </form>
-      <p className="register-link">
-        Bạn đã có tài khoản!
+    <p className="register-link">
+        Chưa có tài khoản? 
         <span 
         className="register-hover" 
-        onClick={() => navigate('/users/login')}
+        onClick={() => navigate('/users/register')}
             >
-            Đăng nhập
+            Đăng ký
         </span>
     </p>
+
     </div>
   );
 };
 
-export default Register;
+export default Login;
