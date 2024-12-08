@@ -63,7 +63,13 @@ const Login = () => {
         <button type="submit">Đăng nhập</button>
       </form>
       <p className="register-link">
-        Chưa có tài khoản? <span onClick={() => navigate('/register')}>Đăng ký</span>
+        Bạn chưa có tài khoản?
+        <span 
+        className="register-hover" 
+        onClick={() => navigate('/users/register')}
+            >
+            Đăng ký
+        </span>
       </p>
     </div>
   );
