@@ -16,6 +16,7 @@ const Tasks = () => {
   const [notification, setNotification] = useState(''); // State để lưu thông báo
   const [selectedTasks, setSelectedTasks] = useState([]); // State để lưu các nhiệm vụ đã chọn
   const [multiStatus, setMultiStatus] = useState(''); // State để lưu trạng thái mới cho các nhiệm vụ đã chọn
+  const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -211,6 +212,22 @@ const Tasks = () => {
       });
   };
 
+  useEffect(() => {
+    const nameUser = () => {
+      axios
+        .get(`${USERS_API_URL}/detail`, { withCredentials: true }) // Gửi yêu cầu với cookie
+        .then((response) => {
+          if (response.data.code === 200) {
+            setUserInfo(response.data.info);
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi gọi API:", error);
+        });
+    };
+
+    nameUser();
+  }, []); // Chỉ chạy một lần khi component được render
 
   if (loading) {
     return (
@@ -222,6 +239,9 @@ const Tasks = () => {
 
   return (
     <div className="tasks-container">
+      <div>
+        {userInfo ? <p>Xin chào, {userInfo.fullName}!</p> : <p>Đang tải thông tin người dùng...</p>}
+      </div>
       <h1>Danh sách công việc</h1>
       {notification && <div className="notification">{notification}</div>}
       <div className="filter-container">
