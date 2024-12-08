@@ -19,6 +19,11 @@ const Login = () => {
       .then((response) => {
         if (response.data.code === 200) {
           setNotification('Đăng nhập thành công!');
+          if (response.data.user) {
+            localStorage.setItem('user', JSON.stringify(response.data.user)); // Lưu thông tin người dùng vào localStorage
+          } else {
+            console.error("Thông tin người dùng không tồn tại trong phản hồi API.");
+          }
           setTimeout(() => {
             setNotification('');
             navigate('/tasks'); // Điều hướng về trang danh sách công việc

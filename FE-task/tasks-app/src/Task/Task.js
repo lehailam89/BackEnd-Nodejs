@@ -45,6 +45,16 @@ const Tasks = () => {
   }, [location.search]);
 
   useEffect(() => {
+    // Lấy thông tin người dùng từ localStorage
+    const userInfo = localStorage.getItem('user');
+    if (userInfo) {
+      try {
+        setUserInfo(JSON.parse(userInfo));
+      } catch (error) {
+        console.error("Lỗi khi phân tích cú pháp JSON:", error);
+      }
+    }
+
     // Gọi API để lấy dữ liệu
     axios
       .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}&keyword=${keyword}`, { withCredentials: true })
@@ -315,7 +325,7 @@ const Tasks = () => {
       <button onClick={() => navigate('/tasks/create')} className="btn btn-primary">
         Tạo công việc mới
       </button>
-      <button onClick={() => navigate('/users/detail')} className="btn btn-secondary">
+      <button onClick={() => navigate('/user-info')} className="btn btn-secondary">
         Xem thông tin cá nhân
       </button>
       <button onClick={handleLogout} className="btn btn-danger">Đăng xuất</button>
