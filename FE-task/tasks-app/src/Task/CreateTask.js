@@ -18,12 +18,15 @@ const CreateTask = () => {
   const handleCreateTask = (e) => {
     e.preventDefault();
     axios
-      .post(`${TASKS_API_URL}/create`, newTask)
+      .post(`${TASKS_API_URL}/create`, newTask, { withCredentials: true }) // Gửi yêu cầu với cookie
       .then((response) => {
         if (response.data.code === 200) {
           setNotification('Tạo nhiệm vụ mới thành công!');
           localStorage.setItem('notification', 'Tạo nhiệm vụ mới thành công!'); // Lưu thông báo vào localStorage
-          navigate('/tasks'); // Điều hướng về trang danh sách công việc
+          setTimeout(() => {
+            setNotification('');
+            navigate('/tasks'); // Điều hướng về trang danh sách công việc
+          }, 3000); // Ẩn thông báo sau 3 giây
         } else {
           console.error("Lỗi khi tạo nhiệm vụ mới:", response.data.message);
         }

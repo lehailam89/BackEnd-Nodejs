@@ -4,6 +4,7 @@ const ForgotPassword = require("../models/forgot-password.model.js");
 const generateHelper = require("../../../helpers/generate.js");
 const sendMailHelper = require("../../../helpers/sendMail");
 
+
 //[POST] /api/v1/users/register
 module.exports.register = async (req, res) => {
     req.body.password = md5(req.body.password);

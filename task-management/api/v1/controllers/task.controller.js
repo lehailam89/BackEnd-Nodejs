@@ -1,6 +1,7 @@
 const Task = require("../models/task.model");
 const paginationHelper = require("../../../helpers/pagination"); 
 const searchHelper = require("../../../helpers/search");
+const User = require("../models/user.model.js");
 
 //[GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
@@ -129,7 +130,15 @@ module.exports.changeMulti = async (req, res) => {
 
 //[POST] /api/v1/create
 module.exports.create = async (req, res) => {
+    const token = req.cookies.token;
+    const user = await User.findOne({
+        token: token,
+        deleted: false
+    }).select("-password");
+
     try{
+        console.log(user.id);
+        req.body.createdBy = user.id;
         const task = new Task(req.body);
         const data = await task.save();
 
