@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Task.css'; // Tạo file CSS riêng nếu cần
-import { TASKS_API_URL } from '../config.js'; // Import URL API
+import { TASKS_API_URL, USERS_API_URL } from '../config.js'; // Import URL API
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -191,6 +191,27 @@ const Tasks = () => {
     }
   };
 
+  const handleLogout = () => {
+    axios
+      .post(`${USERS_API_URL}/logout`, {}, { withCredentials: true })
+      .then((response) => {
+        if (response.data.code === 200) {
+          setNotification('Đăng xuất thành công!');
+          setTimeout(() => {
+            setNotification('');
+            navigate('/users/login'); // Điều hướng đến trang đăng nhập
+          }, 3000); // Ẩn thông báo sau 3 giây
+        } else {
+          setNotification(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API:", error);
+        setNotification('Đã xảy ra lỗi, vui lòng thử lại sau.');
+      });
+  };
+
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -277,6 +298,7 @@ const Tasks = () => {
       <button onClick={() => navigate('/users/detail')} className="btn btn-secondary">
         Xem thông tin cá nhân
       </button>
+      <button onClick={handleLogout} className="btn btn-danger">Đăng xuất</button>
       <ul>
         {tasks.map((task) => (
           <li key={task._id} className={`task-item ${task.status}`}>

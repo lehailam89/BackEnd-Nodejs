@@ -8,6 +8,7 @@ const UserInfo = () => {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(''); // State để lưu thông báo
 
+
   useEffect(() => {
     axios
       .get(`${USERS_API_URL}/detail`, { withCredentials: true }) // Gửi yêu cầu với cookie

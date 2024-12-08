@@ -15,4 +15,6 @@ router.post("/password/reset", controller.resetPassword);
 
 router.get("/detail", controller.detail);
 
+router.post("/logout", controller.logout);
+
 module.exports = router;
