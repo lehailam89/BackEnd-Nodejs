@@ -218,3 +218,16 @@ module.exports.logout = async (req, res) => {
         message: "Đăng xuất thành công!"
     });
 };
+
+///[GET] /api/v1/users/list
+module.exports.list = async (req, res) => {
+    const users = await User.find({
+        deleted: false
+    }).select("fullName email");
+
+    res.json({
+        code: 200,
+        message: "Thành công!!",
+        users: users
+    })
+}

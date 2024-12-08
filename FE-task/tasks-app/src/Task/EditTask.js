@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { TASKS_API_URL } from '../config.js'; // Import URL API
+import { TASKS_API_URL, USERS_API_URL } from '../config.js'; // Import URL API
 import './EditTask.css'; // Import CSS
 
 const EditTask = () => {
@@ -12,9 +12,11 @@ const EditTask = () => {
     content: '',
     status: 'initial',
     timeStart: '',
-    timeFinish: ''
+    timeFinish: '',
+    listUser: []
   }); // State để lưu thông tin công việc
   const [notification, setNotification] = useState(''); // State để lưu thông báo
+  const [users, setUsers] = useState([]); // State để lưu danh sách người dùng
 
   useEffect(() => {
     axios
@@ -28,6 +30,20 @@ const EditTask = () => {
       })
       .catch((error) => {
         console.error("Lỗi khi gọi API chi tiết công việc:", error);
+      });
+
+    // Lấy danh sách người dùng từ backend
+    axios
+      .get(`${USERS_API_URL}/list`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.code === 200) {
+          setUsers(response.data.users);
+        } else {
+          console.error("Lỗi khi lấy danh sách người dùng:", response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API:", error);
       });
   }, [id]);
 
@@ -49,6 +65,21 @@ const EditTask = () => {
       .catch((error) => {
         console.error("Lỗi khi gọi API:", error);
       });
+  };
+
+  const handleUserChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setTask((prevTask) => ({
+        ...prevTask,
+        listUser: [...prevTask.listUser, value]
+      }));
+    } else {
+      setTask((prevTask) => ({
+        ...prevTask,
+        listUser: prevTask.listUser.filter((userId) => userId !== value)
+      }));
+    }
   };
 
   return (
@@ -108,6 +139,23 @@ const EditTask = () => {
             onChange={(e) => setTask({ ...task, timeFinish: e.target.value })}
             required
           />
+        </div>
+        <div className="form-group">
+          <label>Người tham gia</label>
+          <div className="participants-container">
+            {users.map((user) => (
+              <div key={user._id} className="participant-item">
+                <input
+                  type="checkbox"
+                  id={user._id}
+                  value={user._id}
+                  checked={task.listUser.includes(user._id)}
+                  onChange={handleUserChange}
+                />
+                <label htmlFor={user._id}>{user.fullName} ({user.email})</label>
+              </div>
+            ))}
+          </div>
         </div>
         <button type="submit">Cập nhật công việc</button>
       </form>

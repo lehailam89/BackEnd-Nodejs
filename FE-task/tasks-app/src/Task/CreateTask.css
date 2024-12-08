@@ -61,3 +61,63 @@
     margin-bottom: 20px;
     text-align: center;
   }
+
+/* CreateTask.css */
+
+/* Container styles */
+.create-task-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-task-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.create-task-container .form-group {
+  margin-bottom: 15px;
+}
+
+.create-task-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.create-task-container .form-group input,
+.create-task-container .form-group textarea,
+.create-task-container .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Styles for participants */
+.participants-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.participant-item input {
+  margin-right: 10px;
+}
+
+.participant-item label {
+  margin: 0;
+}
