@@ -5,9 +5,29 @@ const User = require("../models/user.model.js");
 
 //[GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
-    const find = {
+    const token = req.cookies.token;
+
+    const user = await User.findOne({
+        token: token,
         deleted: false
+    }).select("_id");
+
+    if (!user) {
+        return res.json({
+            code: 400,
+            message: "Người dùng không tồn tại hoặc đã bị xóa."
+        });
     }
+
+    const userId = user._id; // Lấy ID của user hiện tại
+
+    const find = {
+        $or: [
+            { createdBy: userId },
+            { listUser: userId }
+        ],
+        deleted: false
+    };
 
     if(req.query.status){
         find.status = req.query.status;
@@ -130,7 +150,7 @@ module.exports.changeMulti = async (req, res) => {
 
 //[POST] /api/v1/create
 module.exports.create = async (req, res) => {
-    const token = req.cookies.token;
+     const token = req.cookies.token;
     const user = await User.findOne({
         token: token,
         deleted: false

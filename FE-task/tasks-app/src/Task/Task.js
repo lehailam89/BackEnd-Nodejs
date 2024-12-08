@@ -47,7 +47,7 @@ const Tasks = () => {
   useEffect(() => {
     // Gọi API để lấy dữ liệu
     axios
-      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}&keyword=${keyword}`)
+      .get(`${TASKS_API_URL}?status=${status}&sortKey=${sortKey}&sortValue=${sortValue}&page=${currentPage}&keyword=${keyword}`, { withCredentials: true })
       .then((response) => {
         setTasks(response.data.tasks || []);
         setTotalPages(response.data.totalPages || 1);
