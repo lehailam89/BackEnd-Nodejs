@@ -23,8 +23,8 @@ module.exports.index = async (req, res) => {
 
     const find = {
         $or: [
-            { createdBy: userId },
-            { listUser: userId }
+            { listUser: { $in: [userId] } },
+            { createdBy: userId }
         ],
         deleted: false
     };

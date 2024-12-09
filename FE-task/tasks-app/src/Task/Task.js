@@ -325,7 +325,7 @@ const Tasks = () => {
       <button onClick={() => navigate('/tasks/create')} className="btn btn-primary">
         Tạo công việc mới
       </button>
-      <button onClick={() => navigate('/user-info')} className="btn btn-secondary">
+      <button onClick={() => navigate('/users/detail')} className="btn btn-secondary">
         Xem thông tin cá nhân
       </button>
       <button onClick={handleLogout} className="btn btn-danger">Đăng xuất</button>
